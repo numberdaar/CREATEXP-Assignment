@@ -1,0 +1,27 @@
+/* SortPanel Component Styles */
+
+.main_div_sortpanel {
+  /* Additional custom styles for the sort panel can be added here */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: white;
+}
+
+/* Custom scrollbar for the sort panel */
+.main_div_sortpanel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.main_div_sortpanel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.main_div_sortpanel::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.main_div_sortpanel::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+} 
