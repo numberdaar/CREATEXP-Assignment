@@ -4,13 +4,56 @@ import SortPanel from './components/SortPanel';
 import { mockClients } from './data/mockData.jsx';
 
 function App() {
+  // Load initial sort criteria from localStorage or use default
+  const getInitialSortCriteria = () => {
+    const saved = localStorage.getItem('clientSortCriteria');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.warn('Failed to parse saved sort criteria:', e);
+      }
+    }
+    return [
+      { id: 'clientName', field: 'clientName', direction: 'asc', label: 'Client Name', icon: '👤' },
+      { id: 'createdAt', field: 'createdAt', direction: 'asc', label: 'Created At', icon: '📅' }
+    ];
+  };
+
   const [clients, setClients] = useState(mockClients);
-  const [sortCriteria, setSortCriteria] = useState([
-    { id: 'clientName', field: 'clientName', direction: 'asc', label: 'Client Name', icon: '👤' },
-    { id: 'createdAt', field: 'createdAt', direction: 'asc', label: 'Created At', icon: '📅' }
-  ]);
+  const [sortCriteria, setSortCriteria] = useState(getInitialSortCriteria);
   const [showSortPanel, setShowSortPanel] = useState(false);
   const [activeTab, setActiveTab] = useState('All');
+
+  // Save sort criteria to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('clientSortCriteria', JSON.stringify(sortCriteria));
+    
+    // Update URL params
+    const params = new URLSearchParams(window.location.search);
+    if (sortCriteria.length > 0) {
+      params.set('sort', JSON.stringify(sortCriteria));
+    } else {
+      params.delete('sort');
+    }
+    
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, '', newUrl);
+  }, [sortCriteria]);
+
+  // Load sort criteria from URL params on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sortParam = params.get('sort');
+    if (sortParam) {
+      try {
+        const urlSortCriteria = JSON.parse(sortParam);
+        setSortCriteria(urlSortCriteria);
+      } catch (e) {
+        console.warn('Failed to parse URL sort criteria:', e);
+      }
+    }
+  }, []);
 
   // Apply sorting when sort criteria changes
   useEffect(() => {
@@ -60,7 +103,7 @@ function App() {
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`pb-2 px-1 border-b-2 font-medium text-sm ${
+                      className={`pb-2 px-1 border-b-2 font-medium text-sm transition-all duration-200 ${
                         activeTab === tab
                           ? 'border-black text-black'
                           : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -74,33 +117,33 @@ function App() {
 
               {/* Action Bar */}
               <div className="flex items-center space-x-3">
-                <button className="p-2 text-gray-400 hover:text-gray-600">
+                <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </button>
                 
                 <button 
-                  className="p-2 text-gray-400 hover:text-gray-600 relative"
+                  className="p-2 text-gray-400 hover:text-gray-600 relative transition-all duration-200 hover:scale-105"
                   onClick={() => setShowSortPanel(!showSortPanel)}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                   </svg>
                   {sortCriteria.length > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
                       {sortCriteria.length}
                     </span>
                   )}
                 </button>
                 
-                <button className="p-2 text-gray-400 hover:text-gray-600">
+                <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
                   </svg>
                 </button>
                 
-                <button className="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2 hover:bg-gray-800">
+                <button className="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2 hover:bg-gray-800 transition-all duration-200 transform hover:scale-105">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>

@@ -34,8 +34,15 @@ const ClientListTable = ({ clients }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {clients.map((client) => (
-            <tr key={client.id} className="hover:bg-gray-50">
+          {clients.map((client, index) => (
+            <tr 
+              key={client.id} 
+              className="hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.01] hover:shadow-sm"
+              style={{
+                animationDelay: `${index * 50}ms`,
+                animation: 'fadeInUp 0.5s ease-out forwards'
+              }}
+            >
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">
                   <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

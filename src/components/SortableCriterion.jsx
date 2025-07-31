@@ -29,7 +29,7 @@ const SortableCriterion = ({
     <div
       ref={setNodeRef}
       style={style}
-      className="grid grid-cols-12 items-center p-3 mb-2 rounded-md"
+      className="grid grid-cols-12 items-center p-3 mb-2 rounded-md transition-all duration-200 hover:shadow-md"
     >
       <div className="col-span-4 flex items-center space-x-3">
         {showDragHandle && (

@@ -76,7 +76,7 @@ const SortPanel = ({ sortCriteria, onSortCriteriaChange, onApplySort, onClearAll
   );
 
   return (
-    <div className="absolute right-0 top-0  w-[700px] bg-white border border-gray-200 rounded-lg shadow-lg z-10 main_div_sortpanel">
+    <div className="absolute right-0 top-0 w-[700px] bg-white border border-gray-200 rounded-lg shadow-lg z-10 main_div_sortpanel animate-slide-down">
       <div className="p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-6">Sort By</h3>
         
